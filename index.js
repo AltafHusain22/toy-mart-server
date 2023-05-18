@@ -25,9 +25,15 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-
-
-
+    const galleryCollection = client.db('toysDB').collection('galleries');
+  
+    // get galleries image
+    app.get('/gallery', async (req, res) => {
+      const cursor = galleryCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+  
 	
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
