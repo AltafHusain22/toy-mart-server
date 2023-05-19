@@ -29,6 +29,7 @@ async function run() {
     const galleryCollection = client.db('toysDB').collection('galleries');
     const recerCollection = client.db('toysDB').collection('racer');
     const turboBlazeCollection = client.db('toysDB').collection('turboBlaze');
+    const monsterCrushersCollection= client.db('toysDB').collection('monsterCrushers');
   
     // get galleries image
     app.get('/gallery', async (req, res) => {
@@ -60,8 +61,29 @@ async function run() {
       res.send(result)
     })
     // get TurboBoosters category
-    app.get('/extremeSpeedsters', async(req,res)=>{
+    app.get('/turboBooster', async(req,res)=>{
       const result = await turboBlazeCollection.findOne({category: 'TurboBoosters'});
+      res.send(result)
+    })
+    // get TurboBoosters category
+    app.get('/fireStroms', async(req,res)=>{
+      const result = await turboBlazeCollection.findOne({category: 'FirestormRacers'});
+      res.send(result)
+    })
+
+    // get megaRoaders category
+    app.get('/megaOffRoaders', async(req,res)=>{
+      const result = await monsterCrushersCollection.findOne({category: 'MegaOffRoaders'});
+      res.send(result)
+    })
+    // get monsterSmashers category
+    app.get('/monsterSmashers', async(req,res)=>{
+      const result = await monsterCrushersCollection.findOne({category: 'MonsterSmashers'});
+      res.send(result)
+    })
+    // get BeastlyCrushers category
+    app.get('/beastlyCrushers', async(req,res)=>{
+      const result = await monsterCrushersCollection.findOne({category: 'BeastlyCrushers'});
       res.send(result)
     })
 
