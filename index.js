@@ -29,7 +29,7 @@ async function run() {
     const galleryCollection = client.db('toysDB').collection('galleries');
     const recerCollection = client.db('toysDB').collection('racer');
     const turboBlazeCollection = client.db('toysDB').collection('turboBlaze');
-    const monsterCrushersCollection= client.db('toysDB').collection('monsterCrushers');
+    const monsterCrushersCollection = client.db('toysDB').collection('monsterCrushers');
   
     // get galleries image
     app.get('/gallery', async (req, res) => {
@@ -38,11 +38,56 @@ async function run() {
       res.send(result);
     });
 
-    // get TurbochargedThrillers category
+    // get TurbochargedThrillers by category
     app.get('/TurboThrillers', async(req,res)=>{
       const result = await recerCollection.findOne({category: 'TurbochargedThrillers'});
       res.send(result)
     })
+
+    // get recerCollection By id 
+    app.get('/singleRacer/:id', async(req,res)=> {
+        const id = req.params.id 
+        const category = await recerCollection.findOne({ "products.id": id });
+        if (category) {
+          const product = category.products.find((item) => item.id === id);
+          if (product) {
+            res.send(product)
+          } else {
+            res.status(404).json({ message: 'Product not found' });
+          }
+        }
+      
+    })
+    // get turboBlazeCollection By id 
+    app.get('/singleTurbo/:id', async(req,res)=> {
+        const id = req.params.id 
+        const category = await turboBlazeCollection.findOne({ "products.id": id });
+        if (category) {
+          const product = category.products.find((item) => item.id === id);
+          if (product) {
+            res.send(product)
+          } else {
+            res.status(404).json({ message: 'Product not found' });
+          }
+        }
+      
+    })
+    // get monsterCrushersCollection By id 
+    app.get('/singleMonster/:id', async(req,res)=> {
+        const id = req.params.id 
+        const category = await monsterCrushersCollection.findOne({ "products.id": id });
+        if (category) {
+          const product = category.products.find((item) => item.id === id);
+          if (product) {
+            res.send(product)
+          } else {
+            res.status(404).json({ message: 'Product not found' });
+          }
+        }
+      
+    })
+
+
 
     // get RacerSpeedy category
     app.get('/RacerSpeedy', async(req,res)=>{
@@ -55,37 +100,18 @@ async function run() {
       res.send(result)
     })
 
-    // get ExtremeSpeedsters category
-    app.get('/extremeSpeedsters', async(req,res)=>{
-      const result = await turboBlazeCollection.findOne({category: 'ExtremeSpeedsters'});
-      res.send(result)
-    })
+ 
     // get TurboBoosters category
     app.get('/turboBooster', async(req,res)=>{
       const result = await turboBlazeCollection.findOne({category: 'TurboBoosters'});
       res.send(result)
     })
-    // get TurboBoosters category
-    app.get('/fireStroms', async(req,res)=>{
-      const result = await turboBlazeCollection.findOne({category: 'FirestormRacers'});
-      res.send(result)
-    })
 
-    // get megaRoaders category
-    app.get('/megaOffRoaders', async(req,res)=>{
-      const result = await monsterCrushersCollection.findOne({category: 'MegaOffRoaders'});
-      res.send(result)
-    })
-    // get monsterSmashers category
-    app.get('/monsterSmashers', async(req,res)=>{
-      const result = await monsterCrushersCollection.findOne({category: 'MonsterSmashers'});
-      res.send(result)
-    })
-    // get BeastlyCrushers category
-    app.get('/beastlyCrushers', async(req,res)=>{
-      const result = await monsterCrushersCollection.findOne({category: 'BeastlyCrushers'});
-      res.send(result)
-    })
+
+
+  
+   
+    
 
   
 	
