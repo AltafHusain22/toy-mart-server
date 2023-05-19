@@ -25,7 +25,10 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
+   
     const galleryCollection = client.db('toysDB').collection('galleries');
+    const recerSpeedyCollection = client.db('toysDB').collection('racerSpeedy');
+    const recerCollection = client.db('toysDB').collection('racer');
   
     // get galleries image
     app.get('/gallery', async (req, res) => {
@@ -33,6 +36,19 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     });
+
+    // get TurbochargedThrillers category
+    app.get('/TurboThrillers', async(req,res)=>{
+      const result = await recerCollection.findOne({category: 'TurbochargedThrillers'});
+      res.send(result)
+    })
+
+    // get RacerSpeedy category
+    app.get('/RacerSpeedy', async(req,res)=>{
+      const result = await recerCollection.findOne({category: 'RacerSpeedy'});
+      res.send(result)
+    })
+
   
 	
     // Send a ping to confirm a successful connection
