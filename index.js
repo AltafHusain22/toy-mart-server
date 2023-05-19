@@ -28,6 +28,7 @@ async function run() {
    
     const galleryCollection = client.db('toysDB').collection('galleries');
     const recerCollection = client.db('toysDB').collection('racer');
+    const turboBlazeCollection = client.db('toysDB').collection('turboBlaze');
   
     // get galleries image
     app.get('/gallery', async (req, res) => {
@@ -50,6 +51,17 @@ async function run() {
     // get SpeedDemonSeries category
     app.get('/SpeedDemon', async(req,res)=>{
       const result = await recerCollection.findOne({category: 'SpeedDemonSeries'});
+      res.send(result)
+    })
+
+    // get ExtremeSpeedsters category
+    app.get('/extremeSpeedsters', async(req,res)=>{
+      const result = await turboBlazeCollection.findOne({category: 'ExtremeSpeedsters'});
+      res.send(result)
+    })
+    // get TurboBoosters category
+    app.get('/extremeSpeedsters', async(req,res)=>{
+      const result = await turboBlazeCollection.findOne({category: 'TurboBoosters'});
       res.send(result)
     })
 
