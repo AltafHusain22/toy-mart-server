@@ -27,7 +27,6 @@ async function run() {
     await client.connect();
    
     const galleryCollection = client.db('toysDB').collection('galleries');
-    const recerSpeedyCollection = client.db('toysDB').collection('racerSpeedy');
     const recerCollection = client.db('toysDB').collection('racer');
   
     // get galleries image
@@ -46,6 +45,11 @@ async function run() {
     // get RacerSpeedy category
     app.get('/RacerSpeedy', async(req,res)=>{
       const result = await recerCollection.findOne({category: 'RacerSpeedy'});
+      res.send(result)
+    })
+    // get SpeedDemonSeries category
+    app.get('/SpeedDemon', async(req,res)=>{
+      const result = await recerCollection.findOne({category: 'SpeedDemonSeries'});
       res.send(result)
     })
 
