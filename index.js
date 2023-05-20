@@ -103,6 +103,15 @@ async function run() {
       res.send(result)
     })
 
+    // get single toy by id 
+
+    app.get('/singleToy/:id', async(req,res)=>{
+      const id = req.params.id 
+      const result = await allToys.findOne({_id : new ObjectId(id)})
+      res.send(result)
+
+    })
+
     // Delete a single toy from db
 
     app.delete('/deleteToy/:id', async(req, res)=>{
@@ -110,6 +119,28 @@ async function run() {
       const result = await allToys.deleteOne({_id : new ObjectId(id)})
       res.send(result)
       
+    })
+
+    // edit a single toy 
+    app.put('/editToy/:id', async(req,res)=>{
+      const id = req.params.id 
+      const updateFields = req.body 
+      const filter = {_id : new ObjectId(id)}
+      const options = {upset: true}
+
+      const updateDoc = {
+        $set : {
+          toyName: updateFields.toyName ,
+          image: updateFields.image ,
+          price: updateFields.price ,
+          rating: updateFields.rating,
+          quantity: updateFields.quantity,
+          category: updateFields.category,
+
+        }
+      }
+      const result = await allToys.updateOne(filter, updateDoc, options)
+      res.send(result)
     })
 
 
