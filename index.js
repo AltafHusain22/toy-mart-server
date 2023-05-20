@@ -29,7 +29,7 @@ async function run() {
     const galleryCollection = client.db('toysDB').collection('galleries');
     const recerCollection = client.db('toysDB').collection('racer');
     const turboBlazeCollection = client.db('toysDB').collection('turboBlaze');
-    const monsterCrushersCollection = client.db('toysDB').collection('monsterCrushers');
+    const allToys = client.db('toysDB').collection('toysCollections')
   
     // get galleries image
     app.get('/gallery', async (req, res) => {
@@ -58,36 +58,6 @@ async function run() {
         }
       
     })
-    // get turboBlazeCollection By id 
-    app.get('/singleTurbo/:id', async(req,res)=> {
-        const id = req.params.id 
-        const category = await turboBlazeCollection.findOne({ "products.id": id });
-        if (category) {
-          const product = category.products.find((item) => item.id === id);
-          if (product) {
-            res.send(product)
-          } else {
-            res.status(404).json({ message: 'Product not found' });
-          }
-        }
-      
-    })
-    // get monsterCrushersCollection By id 
-    app.get('/singleMonster/:id', async(req,res)=> {
-        const id = req.params.id 
-        const category = await monsterCrushersCollection.findOne({ "products.id": id });
-        if (category) {
-          const product = category.products.find((item) => item.id === id);
-          if (product) {
-            res.send(product)
-          } else {
-            res.status(404).json({ message: 'Product not found' });
-          }
-        }
-      
-    })
-
-
 
     // get RacerSpeedy category
     app.get('/RacerSpeedy', async(req,res)=>{
@@ -100,10 +70,36 @@ async function run() {
       res.send(result)
     })
 
- 
     // get TurboBoosters category
     app.get('/turboBooster', async(req,res)=>{
       const result = await turboBlazeCollection.findOne({category: 'TurboBoosters'});
+      res.send(result)
+    })
+
+    // insert a toy to db 
+
+    app.post('/addtoy', async (req, res) => {
+      const toyData = req.body;
+    
+      if (!toyData) {
+        return res.status(404).send({ message: 'Body Data Not Found' });
+      }
+    
+      try {
+        const result = await allToys.insertOne(toyData);
+        res.send(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Error inserting toy data' });
+      }
+    });
+
+    // get all toys from db
+
+    app.get('/alltoys', async(req,res)=>{
+
+      const cursor =  allToys.find()
+      const result = await cursor.toArray()
       res.send(result)
     })
 
