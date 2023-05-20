@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const port = process.env.PORT || 5000
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 const cors = require('cors');
 
@@ -103,14 +103,16 @@ async function run() {
       res.send(result)
     })
 
+    // Delete a single toy from db
+
+    app.delete('/deleteToy/:id', async(req, res)=>{
+      const id = req.params.id 
+      const result = await allToys.deleteOne({_id : new ObjectId(id)})
+      res.send(result)
+      
+    })
 
 
-  
-   
-    
-
-  
-	
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
