@@ -4,6 +4,7 @@ const port = process.env.PORT || 5000
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 const cors = require('cors');
+const jwt = require('jsonwebtoken')
 
 // middleware 
 app.use(cors())
@@ -22,6 +23,25 @@ const client = new MongoClient(uri, {
   }
 });
 
+// verifying valid user by jwt 
+
+// const verifyJwt = (req, res, next )=>{
+//   const authorization = req.headers.authorization
+//   if(!authorization){
+//     return res.send({error:true , message: 'Unauthorize Access'})
+//   }
+
+//   const token = authorization.split(' ')[1]
+//   jwt.verify(token, process.env.ACCESS_TOKEN, (error, decoded)=>{
+//     if(error){
+//       return res.status(403).send({error:true , message: 'Unauthorize Access'})
+//     }
+//     req.decoded = decoded 
+//     next()
+//   }) 
+// }
+// ...................continue next below
+
 async function run() {
   try {
     await client.connect();
@@ -30,6 +50,16 @@ async function run() {
     const recerCollection = client.db('toysDB').collection('racer');
     const turboBlazeCollection = client.db('toysDB').collection('turboBlaze');
     const allToys = client.db('toysDB').collection('toysCollections')
+
+    // JWT 
+    app.post('/jwt', (req,res)=>{
+      const userInfo = req.body 
+      console.log(userInfo)
+      const token = jwt.sign(userInfo , process.env.ACCESS_TOKEN ,{
+        expiresIn: '1h' 
+      })
+    res.send({token})
+    })
   
     // get galleries image
     app.get('/gallery', async (req, res) => {
@@ -97,9 +127,13 @@ async function run() {
     // get all toys from db
 
     app.get('/alltoys', async(req,res)=>{
-
-      const cursor =  allToys.find()
-      const result = await cursor.toArray()
+    //   const decoded = req.decoded
+    // let query = { };
+    // console.log('email finding',query)
+    // if(req.decoded?.email){
+    //   query = {email: req.decoded.email}
+    // }
+      result = await allToys.find().toArray()
       res.send(result)
     })
 
